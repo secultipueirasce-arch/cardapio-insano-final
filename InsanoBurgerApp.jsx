@@ -1,4 +1,39 @@
-import React, { useState, useContext, createContext } from 'react';
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insano Burger Cardápio</title>
+    
+    <!-- 1. Carrega o Tailwind CSS (para o design funcionar) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Carrega o React (a "mágica" do seu app) -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- 3. Carrega o Babel (para o navegador entender o JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Estilo da Fonte (adicionado para garantir que a fonte Bebas Neue carregue) -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
+      .font-bebas { font-family: 'Bebas Neue', sans-serif; }
+      .font-roboto { font-family: 'Roboto', sans-serif; }
+    </style>
+
+</head>
+<body class="bg-black">
+    <!-- 4. Este é o "chão" onde seu app será construído -->
+    <div id="root"></div>
+
+    <!-- 5. Aplicativo React Embutido e Iniciador -->
+    <script type="text/babel">
+      // Como React e ReactDOM são carregados acima, usamos as variáveis globais
+      // Em vez de 'import React...', usamos 'const { ... } = React'
+      const { useState, useContext, createContext, StrictMode } = React;
+
+     import React, { useState, useContext, createContext } from 'react';
 
 // --- DADOS DO CARDÁPIO ---
 // (Dados mantidos exatamente como estavam)
@@ -9,7 +44,7 @@ const additionalsData = [
   { name: 'Carne de Sol', price: 6.00 },
   { name: 'Cebola', price: 0.50 },
   { name: 'Cebola Roxa', price: 0.50 },
-  { name: 'Cebola Caramelizada', price: 2.00 },
+  { name: 'Cebola Caramelizada', price: 2.00 }, // <-- ADICIONEI AQUI
   { name: 'Cheddar', price: 2.50 },
   { name: 'Cream Cheese', price: 4.00 },
   { name: 'Geleia de Pimenta', price: 2.00 },
@@ -40,6 +75,30 @@ const menuData = {
     { id: 'b11', name: 'Biruta (Especial)', price: 18.00, ingredients: ['Pão Brioche', 'Tiras de Frango Empanado', 'Geleia de Pimenta', 'Bacon', 'Onion Rings', 'Piccles', 'Molho Especial'] },
     { id: 'b12', name: 'Pancada (Especial)', price: 20.00, ingredients: ['Pão Brioche', 'Blend 100g Bovino', 'Camarão Empanado', 'Cream Cheese', 'Molho Especial'] },
   ],
+  // --- NOVA CATEGORIA: Monte seu Hambúrguer ---
+  buildYourOwn: [
+    { id: 'byo1', name: 'Pão Bola', price: 1.00 },
+    { id: 'byo2', name: 'Pão Brioche', price: 3.00 },
+    { id: 'byo3', name: 'Pão Árabe', price: 3.00 },
+    { id: 'byo4', name: 'Hamburguer Carne', price: 4.50 },
+    { id: 'byo5', name: 'Hamburguer Frango', price: 4.50 },
+    { id: 'byo6', name: 'Carne de Sol', price: 6.00 },
+    { id: 'byo7', name: 'Bacon', price: 3.00 },
+    { id: 'byo8', name: 'Calabresa', price: 2.50 },
+    { id: 'byo9', name: 'Camarão', price: 2.00 },
+    { id: 'byo10', name: 'Ovo', price: 1.50 },
+    { id: 'byo11', name: 'Queijo Coalho', price: 2.50 },
+    { id: 'byo12', name: 'Cheddar', price: 2.50 },
+    { id: 'byo13', name: 'Cream Cheese', price: 4.00 },
+    { id: 'byo14', name: 'ONION RINGS', price: 3.00 },
+    { id: 'byo15', name: 'Geleia de Pimenta', price: 2.00 },
+    { id: 'byo16', name: 'Piccles', price: 1.00 },
+    { id: 'byo17', name: 'Tomate', price: 0.50 },
+    { id: 'byo18', name: 'Cebola', price: 0.50 },
+    { id: 'byo19', name: 'Cebola Roxa', price: 0.50 },
+    { id: 'byo20', name: 'Cebola Caramelizada', price: 2.00 },
+  ],
+  // --- FIM DA NOVA CATEGORIA ---
   sides: [
     { id: 's1', name: 'Batata Frita 300g', price: 12.00 },
     { id: 's2', name: 'Batata Especial 500g (Cheddar e Bacon)', price: 20.00 },
@@ -61,7 +120,7 @@ const menuData = {
     // { id: 'd11', name: 'Pepsi e Guaraná 1L', price: 8.00 }, // <-- REMOVIDO
     { id: 'd11_p', name: 'Pepsi 1L', price: 8.00 }, // <-- ADICIONADO
     { id: 'd11_g', name: 'Guaraná 1L', price: 8.00 }, // <-- ADICIONADO
-    { id: 'd12', name: 'Coca de Vidro 1L', price: 10.00 },
+    // { id: 'd12', name: 'Coca de Vidro 1L', price: 10.00 }, // <-- REMOVIDO
   ]
 };
 
@@ -659,6 +718,23 @@ function App() {
               ))}
             </div>
           </section>
+
+          {/* --- NOVA SEÇÃO: Monte seu Hambúrguer --- */}
+          <section className="mb-6">
+            <h3 className="text-3xl font-bebas tracking-wider font-bold mb-3 text-yellow-500 border-b border-gray-700 pb-1 uppercase">Monte seu Hambúrguer</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {menuData.buildYourOwn.map((item) => (
+                <MenuItem
+                  key={item.id}
+                  item={item}
+                  // Passa apenas as funções de ABRIR o modal
+                  onAddBurger={handleOpenBurgerModal}
+                  onAddOptionItem={handleOpenOptionsModal}
+                />
+              ))}
+            </div>
+          </section>
+          {/* --- FIM DA NOVA SEÇÃO --- */}
 
           {/* Seção de Acompanhamentos */}
           <section className="mb-6">
